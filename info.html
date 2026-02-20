@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info - img.pdf.com</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1e1e2f, #0f0f1f);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        header h1 {
+            font-size: 28px;
+            color: #00ffcc;
+            letter-spacing: 1px;
+        }
+
+        nav button {
+            background: transparent;
+            border: 2px solid #00ffcc;
+            color: #00ffcc;
+            padding: 10px 20px;
+            margin-left: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover {
+            background: #00ffcc;
+            color: #000;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .container h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #00ffe0;
+        }
+
+        .container p {
+            max-width: 800px;
+            line-height: 1.8;
+            font-size: 18px;
+            margin-bottom: 40px;
+            color: #ccc;
+        }
+
+        .ai-images {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .ai-images div {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, #00ffcc, #0099ff);
+            border-radius: 20px;
+            animation: float 4s ease-in-out infinite alternate;
+            box-shadow: 0 0 20px #00ffcc, 0 0 40px #0099ff inset;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #00ffcc;
+            font-size: 14px;
+            border-top: 1px solid rgba(0, 255, 204, 0.3);
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>img.pdf.com</h1>
+        <nav>
+            <button onclick="location.href='info.html'">Info</button>
+            <button onclick="location.href='register.html'">Register</button>
+            <button onclick="location.href='signin.html'">Sign In</button>
+            <button onclick="letsDoIt()">LetsDoIt!</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Welcome to img.pdf.com</h2>
+        <p>
+            Convert your images into PDFs effortlessly with our AI-powered tools.
+            Our platform allows you to register, sign in, and securely manage your files.
+            Experience seamless, animated, and interactive design while converting your images into professional PDFs.
+        </p>
+        <div class="ai-images">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 img.pdf.com | All rights reserved
+    </footer>
+
+    <script>
+        function letsDoIt() {
+            // Check if user is signed in
+            if (localStorage.getItem('signedIn') === 'true') {
+                location.href = 'convert.html';
+            } else {
+                alert("Please Sign In first to access Convert It!");
+                location.href = 'signin.html';
+            }
+        }
+    </script>
+</body>
+
+</html>

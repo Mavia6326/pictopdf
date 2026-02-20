@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - img.pdf.com</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f0f1f, #1a1a2e);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .register-container {
+            background: rgba(0, 255, 204, 0.05);
+            border: 2px solid #00ffcc;
+            border-radius: 20px;
+            padding: 40px;
+            width: 350px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(0, 255, 204, 0.5);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .register-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #00ffe0;
+        }
+
+        .register-container input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #00ffcc;
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+        }
+
+        .register-container input:focus {
+            outline: none;
+            border: 2px solid #00ffcc;
+        }
+
+        .register-container button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 12px;
+            background: #00ffcc;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .register-container button:hover {
+            background: #00d1aa;
+        }
+
+        .message {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .message.error {
+            color: #ff4d4d;
+        }
+
+        .message.success {
+            color: #00ffcc;
+        }
+
+        .login-link {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .login-link span {
+            color: #00ff00;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-container">
+        <h2>Register Now!</h2>
+        <input type="text" id="firstName" placeholder="First Name" required>
+        <input type="text" id="lastName" placeholder="Last Name" required>
+        <input type="email" id="email" placeholder="E-Mail" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+        <button onclick="registerUser()">Register</button>
+        <div class="message" id="message"></div>
+        <div class="login-link">
+            Already have an account? <span onclick="goToSignIn()">Sign In</span>
+        </div>
+    </div>
+
+    <script>
+        function registerUser() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const message = document.getElementById('message');
+
+            // Basic validation
+            if (!firstName || !lastName || !email || !password || !confirmPassword) {
+                message.textContent = "All fields are required!";
+                message.className = "message error";
+                return;
+            }
+
+            // Email format validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                message.textContent = "Please enter a valid email!";
+                message.className = "message error";
+                return;
+            }
+
+            // Password match
+            if (password !== confirmPassword) {
+                message.textContent = "Passwords do not match!";
+                message.className = "message error";
+                return;
+            }
+
+            // Save user to localStorage (simulate database)
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const existingUser = users.find(u => u.email === email);
+            if (existingUser) {
+                message.textContent = "Email already registered!";
+                message.className = "message error";
+                return;
+            }
+
+            users.push({ firstName, lastName, email, password });
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Simulate email confirmation
+            alert(`Registration Successful!\nConfirmation sent to ${email} (simulated)`);
+
+            // Mark user as signed in
+            localStorage.setItem('signedIn', 'true');
+            localStorage.setItem('currentUser', email);
+
+            // Redirect to Info/Home page
+            location.href = 'info.html';
+        }
+
+        function goToSignIn() {
+            location.href = 'signin.html';
+        }
+    </script>
+</body>
+
+</html>

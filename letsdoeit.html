@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convert It! - img.pdf.com</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f0f1f, #1a1a2e);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        header h1 {
+            color: #00ffcc;
+        }
+
+        nav button {
+            background: transparent;
+            border: 2px solid #00ffcc;
+            color: #00ffcc;
+            padding: 8px 16px;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        nav button:hover {
+            background: #00ffcc;
+            color: #000;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .container h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            color: #00ffe0;
+        }
+
+        .drop-area {
+            width: 400px;
+            height: 250px;
+            border: 3px dashed #00ffcc;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            transition: 0.3s;
+            color: #00ffcc;
+            font-size: 18px;
+            background: rgba(0, 255, 204, 0.05);
+            cursor: pointer;
+        }
+
+        .drop-area.hover {
+            background: rgba(0, 255, 204, 0.2);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        button#downloadBtn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 12px;
+            background: #00ffcc;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button#downloadBtn:hover {
+            background: #00d1aa;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>img.pdf.com</h1>
+        <nav>
+            <button onclick="location.href='info.html'">Info</button>
+            <button onclick="location.href='register.html'">Register</button>
+            <button onclick="location.href='signin.html'">Sign In</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Convert It!</h2>
+        <div class="drop-area" id="dropArea">
+            Drag & Drop Images Here or Click to Upload
+        </div>
+        <input type="file" id="fileInput" accept="image/*" multiple>
+        <button id="downloadBtn">Download PDF</button>
+    </div>
+
+    <script>
+        // Check if user is signed in
+        if (localStorage.getItem('signedIn') !== 'true') {
+            alert("Please Sign In first to access Convert It!");
+            location.href = 'signin.html';
+        }
+
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        let files = [];
+
+        dropArea.addEventListener('click', () => fileInput.click());
+
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.classList.add('hover');
+        });
+
+        dropArea.addEventListener('dragleave', () => dropArea.classList.remove('hover'));
+
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.classList.remove('hover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+
+        function handleFiles(selectedFiles) {
+            for (let i = 0; i < selectedFiles.length; i++) {
+                files.push(selectedFiles[i]);
+            }
+            dropArea.textContent = files.length + " image(s) ready for PDF!";
+        }
+
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            if (files.length === 0) {
+                alert("Please add at least one image!");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            let loadedImages = 0;
+
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const imgData = event.target.result;
+                    const img = new Image();
+                    img.src = imgData;
+
+                    img.onload = function () {
+                        const imgWidth = 180;
+                        const imgHeight = (img.height * imgWidth) / img.width;
+
+                        if (index !== 0) pdf.addPage();
+                        pdf.addImage(img, 'JPEG', 15, 15, imgWidth, imgHeight);
+
+                        loadedImages++;
+                        if (loadedImages === files.length) {
+                            pdf.save('converted.pdf');
+                            files = [];
+                            dropArea.textContent = "Drag & Drop Images Here or Click to Upload";
+                        }
+                    }
+                }
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+</body>
+
+</html>
